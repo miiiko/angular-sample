@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../user.service';
 
 export class User {
   id: number;
@@ -12,7 +13,9 @@ export class User {
 })
 export class UserListComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private service: UserService
+  ) { }
   users: User[];
 
   ngOnInit() {
@@ -21,6 +24,7 @@ export class UserListComponent implements OnInit {
       { id: 2, name: 'Suzuki', email: 'suzuki@example.com' },
       { id: 3, name: 'Tanaka', email: 'tanaka@example.com' },
     ];
+    this.users = this.service.getUsers();
   }
 
 }
