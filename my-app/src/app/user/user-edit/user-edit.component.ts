@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../tools/confirm-dialog/confirm-dialog.component';
 
 import { User } from '../user-list/user-list.component';
 import { UserService } from '../user.service';
@@ -13,7 +15,8 @@ export class UserEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: UserService
+    private service: UserService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -29,5 +32,19 @@ export class UserEditComponent implements OnInit {
     };
     this.service.setUser(user);
     this.router.navigate(["/users"]);
-  }
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: {
+        title: 'Confirm',
+        message: 'Are you sure you want to update this user?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.service.setUser(user);
+        this.router.navigate(["/users"]);
+      }
+    });
+  };
 }
